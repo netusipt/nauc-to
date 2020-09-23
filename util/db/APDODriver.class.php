@@ -35,7 +35,7 @@ abstract class APDODriver
             $result = $this->pdo->prepare($sql);
             $result->execute();
         } catch (PDOException $e) {
-            throw new PDOException("Chyba SQL dotazu: " . $e->getMessage());
+            throw new PDOException("Query error: " . $e->getMessage());
         }
 
         if($fetch) {
