@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use controller\Router;
 
+
 spl_autoload_register(function (string $path) {
     $class = explode("\\", $path);
     if($class[count($class) - 1][0] != "I") {

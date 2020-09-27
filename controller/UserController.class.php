@@ -2,101 +2,99 @@
 
 declare(strict_types=1);
 
-namespace Controller;
+namespace controller;
 
 use Exception;
 use InvalidArgumentException;
-use Model\Impl\Uzivatel;
-use Util\EntityDbConnector;
+use model\User;
+use util\db\EntityDbConnector;
 
-class UzivatelController extends AController
+class UserController extends AController
 {
-    private $container;
 
-    public function __construct($container)
+    public function process($parametry)
     {
-        $this->container = $container;
-    }
+        $user = new User();
+        $dbConnector = new EntityDbConnector();
 
-    public function zpracuj($parametry)
-    {
-        $uzivatel = new Uzivatel();
-        $dbConnector = new EntityDbConnector($this->container["db"]);
+        if ($parametry[0] === "login") {
+            $this->view = "login";
+            $this->data["loged"] = false;
 
-        if ($parametry[0] === "prihlaseni") {
-            $this->pohled = "prihlaseni";
-            $this->data["prihlasen"] = false;
-
-            if (isset($_POST["odeslat"])) {
+            if (isset($_POST["submit"])) {
                 try {
-                    $uzivatel = $dbConnector->nacti($uzivatel, "login", $_POST["login"]);
-                    if($uzivatel->jeHesloSpravne($_POST["heslo"])) {
-                        $this->data["prihlasen"] = true;
+                    $user = $dbConnector->load($user, "email", $_POST["email"]);
+                    var_dump($user);
+                    if($user->isPasswordCorrect($_POST["password"])) {
+                        $this->data["loged"] = true;
                     } else {
-                        $this->data["chybaPrihlaseni"] = "Zadal(a) jste chybné jméno nebo heslo";
+                        $this->data["loginEx"] = "Zadal(a) jste chybné jméno nebo heslo";
                     }
                 } catch (Exception $e) {
-                    $this->data["chybaPrihlaseni"] = "Zadal(a) jste chybné jméno nebo heslo";
+                    $this->data["loginEx"] = "Zadal(a) jste chybné jméno nebo heslo";
                 }
 
             }
-        } elseif ($parametry[0] === "registrace") {
-            $this->pohled = "registrace";
+        } elseif ($parametry[0] === "registration") {
+            $this->view = "registration";
 
-            if (isset($_POST["odeslat"])) {
+            if (isset($_POST["submit"])) {
 
-                if ($_POST["login"] !== "") {
+                if ($_POST["firstName"] !== "") {
                     try {
-                        $uzivatel->setLogin($_POST["login"]);
+                        $user->setFirstName($_POST["firstName"]);
                     } catch (InvalidArgumentException $e) {
-                        $this->data["chybaLogin"] = $e->getMessage();
+                        $this->data["firstNameEx"] = $e->getMessage();
                     }
                 } else {
-                    $this->data["chybaLogin"] = "Zadejte uživatelské jméno";
+                    $this->data["firstNameEx"] = "Zadejte jmeno";
                 }
 
-                if ($_POST["narozeni"] !== "") {
+                if ($_POST["email"] !== "") {
                     try {
-                        $uzivatel->setNarozeni($_POST["narozeni"]);
+                        $user->setEmail($_POST["email"]);
                     } catch (InvalidArgumentException $e) {
-                        $this->data["chybaNarozeni"] = $e->getMessage();
+                        $this->data["emailEx"] = $e->getMessage();
                     }
                 } else {
-                    $this->data["chybaNarozeni"] = "Zadejte datum narození";
+                    $this->data["emailEx"] = "Zadejte e-mail";
                 }
 
-                if ($_POST["heslo"] !== "") {
+                if ($_POST["password"] !== "") {
                     try {
-                        $uzivatel->setHeslo($_POST["heslo"]);
+                        $user->setPassword($_POST["password"]);
                     } catch (InvalidArgumentException $e) {
-                        $this->data["chybaHeslo"] = $e->getMessage();
+                        $this->data["passwordEx"] = $e->getMessage();
                     }
                 } else {
-                    $this->data["chybaHeslo"] = "Zadejte heslo";
+                    $this->data["passwordEx"] = "Zadejte heslo";
                 }
 
-                if ($_POST["hesloZnovu"] !== "") {
-                    if (!$uzivatel->jeHesloSpravne($_POST["hesloZnovu"])) {
-                        $this->data["chybaHesloZnovu"] = "Heslo se neshoduje";
+                if ($_POST["passwordAgain"] !== "") {
+                    if ($_POST["password"] != $_POST["passwordAgain"]) {
+                        $this->data["passwordAgainEx"] = "Heslo se neshoduje";
                     }
                 } else {
-                    $this->data["chybaHesloZnovu"] = "Zadejte heslo znovu";
+                    $this->data["passwordAgainEx"] = "Zadejte heslo znovu";
                 }
 
-                if (!isset($_POST["souhlas"])) {
-                    $this->data["chybaSouhlas"] = "Pro úspěšnou registraci je třeba souhlasit s obchodními podmínkami";
+                if (!isset($_POST["conditions"])) {
+                    $this->data["conditionsEx"] = "Pro úspěšnou registraci je třeba souhlasit s obchodními podmínkami";
                 }
+
+                var_dump($user);
 
                 if
                 (
-                    !isset($this->data["chybaLogin"]) &&
-                    !isset($this->data["chybaNarozeni"]) &&
-                    !isset($this->data["chybaHeslo"]) &&
-                    !isset($this->data["chybaHesloZnovu"]) &&
-                    !isset($this->data["chybaSouhlas"])
+                    !isset($this->data["emailEx"]) &&
+                    !isset($this->data["passwordEx"]) &&
+                    !isset($this->data["passwordAgainEx"]) &&
+                    !isset($this->data["conditionsEx"])
                 )
                 {
-                    $dbConnector->pridej($uzivatel);
+                    $dbConnector->insert($user);
+                } else {
+                    var_dump("nesplnilo podmínky");
                 }
             }
         }

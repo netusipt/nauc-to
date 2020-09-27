@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace util\Db;
+namespace util\db;
 
 class DbConfig {
 

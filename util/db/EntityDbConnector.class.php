@@ -1,19 +1,19 @@
 <?php
 declare(strict_types = 1);
 
-use util\DatabaseDto;
-use util\Helper;
-use util\MySQLDriver;
+namespace util\db;
 
-namespace util;
+use util\Helper;
 
 class EntityDbConnector
 {
-    private $db;
+    private MySQLDriver $db;
+    private PropertyNameConvertor $propertyConvertor;
 
-    public function __construct(DatabaseDto $dbDto)
+    public function __construct()
     {
-        $this->db = MySQLDriver::getInstance($dbDto);
+        $this->db = MySQLDriver::getInstance();
+        $this->propertyConvertor = new PropertyNameConvertor();
     }
 
     public function load($entity, $property, $value)
@@ -21,7 +21,7 @@ class EntityDbConnector
         $result = $this->db->select($entity->table, $property, $value);
 
         foreach ($entity->getPropertyNames() as $property) {
-            $setter = Helper::setter($property);
+            $setter = Helper::setter($this->propertyConvertor->dbToClass($property));
             $entity->$setter($result[$property], true);
         }
 
@@ -30,8 +30,9 @@ class EntityDbConnector
 
     public function insert($entity)
     {
-        $properties = $entity->getPropeties();
+        $properties = $entity->getProperities();
         unset($properties["id"]);
+        $properties = $this->propertyConvertor->classToDbAll($properties);
         $this->db->insert($entity->table, $properties);
     }
 
@@ -42,7 +43,10 @@ class EntityDbConnector
 
     public function update($entity, $id)
     {
-        $this->db->update($entity->table, $entity->getPropeties(), $id);
+        $properties = $this->propertyConvertor->classToDbAll($entity->getProperities());
+        $this->db->update($entity->table, $properties, $id);
     }
+
+
 
 }

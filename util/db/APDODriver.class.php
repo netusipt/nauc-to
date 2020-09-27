@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace util\Db;
+namespace util\db;
 
 use PDO;
 use PDOException;
@@ -22,6 +22,7 @@ abstract class APDODriver
                 DbConfig::$USER,
                 DbConfig::$PASSWORD
             );
+            var_dump("fail");
         } catch (PDOException $e) {
             throw new PDOException("Database connection failed: " . $e->getMessage());
         }
@@ -31,6 +32,7 @@ abstract class APDODriver
 
     protected function query(string $sql, bool $fetch = false, $all = false)
     {
+        var_dump($this->pdo);
         try {
             $result = $this->pdo->prepare($sql);
             $result->execute();

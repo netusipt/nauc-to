@@ -1,25 +1,24 @@
 <?php
 declare(strict_types = 1);
 
-namespace util;
+namespace util\db;
 
 class MySQLDriver extends APDODriver
 {
 
     private static $instace;
 
-    public static function getInstance(DatabaseDto $db)
+    public static function getInstance()
     {
         if(self::$instace == null) {
-            self::$instace = new MySQLDriver($db);
+            self::$instace = new MySQLDriver();
         }
         return self::$instace;
     }
 
-    private function __construct(DatabaseDto $db)
+    private function __construct()
     {
-        $db->setTyp("mysql");
-        parent::__construct($db);
+        parent::__construct();
     }
 
     public function select(string $table, string $property,  $value)
@@ -55,6 +54,7 @@ class MySQLDriver extends APDODriver
         $sql = rtrim($sql, ", ");
         $sql .= ");";
 
+        var_dump($sql);
         $this->query($sql);
     }
 

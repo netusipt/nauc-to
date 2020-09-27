@@ -12,9 +12,9 @@ class Router extends AController
         $urlArray = $this->parseUrl($params[0]);
 
         if(!empty($urlArray[3])) {
-            $controllerName = "Controller\\" . ucfirst(array_shift($urlArray)) . "Controller";
+            $controllerName = "controller\\" . ucfirst(array_shift($urlArray)) . "Controller";
         } else {
-            $controllerName = "Controller\HomeController";
+            $controllerName = "controller\HomeController";
         }
 
         if(file_exists("$controllerName.class.php")) {
