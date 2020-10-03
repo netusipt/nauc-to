@@ -54,7 +54,6 @@ class MySQLDriver extends APDODriver
         $sql = rtrim($sql, ", ");
         $sql .= ");";
 
-        var_dump($sql);
         $this->query($sql);
     }
 

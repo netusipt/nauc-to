@@ -9,7 +9,7 @@ use PDOException;
 
 abstract class APDODriver
 {
-    private $pdo;
+    private PDO $pdo;
 
     public function __construct()
     {
@@ -22,7 +22,6 @@ abstract class APDODriver
                 DbConfig::$USER,
                 DbConfig::$PASSWORD
             );
-            var_dump("fail");
         } catch (PDOException $e) {
             throw new PDOException("Database connection failed: " . $e->getMessage());
         }
@@ -30,9 +29,8 @@ abstract class APDODriver
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    protected function query(string $sql, bool $fetch = false, $all = false)
+    protected function query(string $sql, bool $fetch = false, bool $all = false)
     {
-        var_dump($this->pdo);
         try {
             $result = $this->pdo->prepare($sql);
             $result->execute();

@@ -7,13 +7,13 @@ use InvalidArgumentException;
 
 class User {
 
-    private int $id;
-    private string $table;
+    private $id;
+    private $table;
 
-    private string $email;
-    private string $password;
-    private string $firstName;
-    private string $lastName;
+    private $email;
+    private $password;
+    private $firstName;
+    private $lastName;
 
     public function __construct()
     {
@@ -27,14 +27,14 @@ class User {
 
     public function getPropertyNames(): array
     {
-        return array_keys($this->getProperities());
+        return array_keys($this->getProperties());
     }
 
-    public function getProperities(): array
+    public function getProperties(): array
     {
-        $atributy = get_object_vars($this);
-        unset($atributy["table"]);
-        return $atributy;
+        $properties = get_object_vars($this);
+        unset($properties["table"]);
+        return $properties;
     }
 
     public function __get($atribut)
@@ -63,6 +63,9 @@ class User {
         }
     }
 
+    public function setId($id) {
+        $this->id = $id;
+    }
 
     public function setFirstName($firstName)
     {

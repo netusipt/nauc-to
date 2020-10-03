@@ -18,9 +18,9 @@ abstract class AController
         }
     }
 
-    public function redirect($url)
+    public function redirect($url = "")
     {
-        header("Location: /$url");
+        header("Location:" . HOME_PATH . $url);
         header("Connection: close");
         exit;
     }

@@ -24,9 +24,10 @@ class UserController extends AController
             if (isset($_POST["submit"])) {
                 try {
                     $user = $dbConnector->load($user, "email", $_POST["email"]);
-                    var_dump($user);
                     if($user->isPasswordCorrect($_POST["password"])) {
-                        $this->data["loged"] = true;
+                        $_SESSION["loggedIn"] = true;
+                        $_SESSION["firstName"] = $user->firstName;
+                        $this->redirect();
                     } else {
                         $this->data["loginEx"] = "Zadal(a) jste chybné jméno nebo heslo";
                     }
@@ -82,8 +83,6 @@ class UserController extends AController
                     $this->data["conditionsEx"] = "Pro úspěšnou registraci je třeba souhlasit s obchodními podmínkami";
                 }
 
-                var_dump($user);
-
                 if
                 (
                     !isset($this->data["emailEx"]) &&
@@ -93,10 +92,13 @@ class UserController extends AController
                 )
                 {
                     $dbConnector->insert($user);
-                } else {
-                    var_dump("nesplnilo podmínky");
                 }
             }
+        } elseif ($parametry[0] === "logout") {
+            session_destroy();
+            $this->redirect();
+        } else {
+            $this->view = "error";
         }
     }
 }

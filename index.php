@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use controller\Router;
 
+define("HOME_PATH", mb_strtolower(explode("www", dirname(__FILE__))[1]));
 
 spl_autoload_register(function (string $path) {
     $class = explode("\\", $path);

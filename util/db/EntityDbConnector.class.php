@@ -21,8 +21,8 @@ class EntityDbConnector
         $result = $this->db->select($entity->table, $property, $value);
 
         foreach ($entity->getPropertyNames() as $property) {
-            $setter = Helper::setter($this->propertyConvertor->dbToClass($property));
-            $entity->$setter($result[$property], true);
+            $setter = Helper::setter($property);
+            $entity->$setter($result[$this->propertyConvertor->classToDb($property)], true);
         }
 
         return $entity;
@@ -30,7 +30,7 @@ class EntityDbConnector
 
     public function insert($entity)
     {
-        $properties = $entity->getProperities();
+        $properties = $entity->getProperties();
         unset($properties["id"]);
         $properties = $this->propertyConvertor->classToDbAll($properties);
         $this->db->insert($entity->table, $properties);
