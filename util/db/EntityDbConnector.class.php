@@ -8,12 +8,10 @@ use util\Helper;
 class EntityDbConnector
 {
     private MySQLDriver $db;
-    private PropertyNameConvertor $propertyConvertor;
 
     public function __construct()
     {
         $this->db = MySQLDriver::getInstance();
-        $this->propertyConvertor = new PropertyNameConvertor();
     }
 
     public function load($entity, $property, $value)
@@ -21,8 +19,9 @@ class EntityDbConnector
         $result = $this->db->select($entity->table, $property, $value);
 
         foreach ($entity->getPropertyNames() as $property) {
+            var_dump($property);
             $setter = Helper::setter($property);
-            $entity->$setter($result[$this->propertyConvertor->classToDb($property)], true);
+            $entity->$setter($result[NameConvertor::classToDb($property)], true);
         }
 
         return $entity;
@@ -32,7 +31,7 @@ class EntityDbConnector
     {
         $properties = $entity->getProperties();
         unset($properties["id"]);
-        $properties = $this->propertyConvertor->classToDbAll($properties);
+        $properties = NameConvertor::classToDbAll($properties);
         $this->db->insert($entity->table, $properties);
     }
 
@@ -43,7 +42,7 @@ class EntityDbConnector
 
     public function update($entity, $id)
     {
-        $properties = $this->propertyConvertor->classToDbAll($entity->getProperities());
+        $properties = NameConvertor::classToDbAll($entity->getProperities());
         $this->db->update($entity->table, $properties, $id);
     }
 

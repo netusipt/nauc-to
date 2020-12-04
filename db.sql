@@ -68,3 +68,4 @@ CREATE TABLE IF NOT EXISTS `messages` (
   FOREIGN KEY (`demend_id`) REFERENCES demend(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
+INSERT INTO `offers` (user_id, title, description, photo, category_id, location_id)

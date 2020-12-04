@@ -5,7 +5,7 @@ namespace controller;
 
 class Router extends AController
 {
-    protected $controller;
+    protected AController $controller;
 
     public function process($params)
     {
@@ -20,7 +20,7 @@ class Router extends AController
         if(file_exists("$controllerName.class.php")) {
             $this->controller = new $controllerName();
         } else {
-            $this->controller = new ErrorController();
+            $this->controller = new ExceptionController(404);
         }
 
         $this->controller->process($urlArray);

@@ -1,26 +1,28 @@
 <?php
 declare(strict_types = 1);
 
-namespace Model\Impl;
+namespace model\impl;
 
-use Model\AModelManager;
-use Util\Helper;
-use Util\MySQLDriver;
+use model\AModel;
+use model\AModelManager;
+use util\db\NameConvertor;
+use util\Helper;
+use util\db\MySQLDriver;
 
 class EntityManager
 {
     private static $object;
 
-    private string $table;
+    private AModel $entity;
     private MySQLDriver $db;
 
-    public static function getInstance(string $table)
+    public static function getInstance(AModel $entity)
     {
         if(self::$object == null) {
             self::$object = new EntityManager();
         }
 
-        self::$object->setTable($table);
+        self::$object->entity = $entity;
 
         return self::$object;
     }
@@ -33,7 +35,7 @@ class EntityManager
     public function getAll() : array
     {
         $entities = [];
-        $result = $this->db->selectAll($this->table);
+        $result = $this->db->selectAll($this->entity->table);
         foreach ($result as $entity) {
             $entities[] = $this->convert($entity);
         }
@@ -43,7 +45,7 @@ class EntityManager
     public function search(string $searchProperty, string $searched) : array
     {
         $entities = [];
-        $result = $this->db->selectLike($this->table, $searchProperty, $searched);
+        $result = $this->db->selectLike($this->entity->table, $searchProperty, $searched);
         foreach ($result as $entity) {
             $entities[] = $this->convert($entity);
         }
@@ -52,17 +54,15 @@ class EntityManager
 
     public function convert(array $entities)
     {
-        $entity = new $this->container["entityInfo"][$this->table]["model"]();
-        foreach ($entity->vratNazvyAtributu() as $atribut) {
-            $setter = Helper::setter($atribut);
-            $entity->$setter($entities[$atribut]);
+        $class = get_class($this->entity);
+        $entity = new $class();
+        foreach ($entity->getPropertyNames() as $property) {
+            $setter = Helper::setter($property);
+            $entity->$setter($entities[NameConvertor::classToDb($property)]);
         }
         return $entity;
     }
 
-    public function setTable($table)
-    {
-        $this->table = $table;
-    }
+
 
 }

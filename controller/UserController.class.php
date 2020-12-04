@@ -6,18 +6,18 @@ namespace controller;
 
 use Exception;
 use InvalidArgumentException;
-use model\User;
+use model\impl\User;
 use util\db\EntityDbConnector;
 
 class UserController extends AController
 {
 
-    public function process($parametry)
+    public function process($params)
     {
         $user = new User();
         $dbConnector = new EntityDbConnector();
 
-        if ($parametry[0] === "login") {
+        if ($params[0] === "login") {
             $this->view = "login";
             $this->data["loged"] = false;
 
@@ -36,7 +36,7 @@ class UserController extends AController
                 }
 
             }
-        } elseif ($parametry[0] === "registration") {
+        } elseif ($params[0] === "registration") {
             $this->view = "registration";
 
             if (isset($_POST["submit"])) {
@@ -94,11 +94,9 @@ class UserController extends AController
                     $dbConnector->insert($user);
                 }
             }
-        } elseif ($parametry[0] === "logout") {
+        } elseif ($params[0] === "logout") {
             session_destroy();
             $this->redirect();
-        } else {
-            $this->view = "error";
         }
     }
 }

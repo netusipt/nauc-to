@@ -1,23 +1,18 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use http\Exception\InvalidArgumentException;
 
-class DI
+class DependencyInjector
 {
     private array $services = [];
-
-    public function register(string $serviceName, stdClass $service): void
-    {
-        $this->services[$serviceName] = $service;
-    }
 
     public function resolve($name)
     {
         if (key_exists($name, $this->services)) {
-            return $this->services[$name];
+            $service = $this->services[$name];
         } else {
-            throw new InvalidArgumentException("Service is not registered");
+            $service = $this->add($name);
         }
     }
 
@@ -27,5 +22,15 @@ class DI
             return true;
         }
         return false;
+    }
+
+    public function getServiceList(): array
+    {
+        return array_keys($this->services);
+    }
+
+    private function add(string $serviceName): void
+    {
+        $this->services[$serviceName] = new $serviceName();
     }
 }

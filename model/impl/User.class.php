@@ -1,16 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace model;
+namespace model\impl;
 
 use InvalidArgumentException;
+use model\AModel;
 
 class User extends AModel
 {
-
-    private $id;
-    private $table;
-
     private $email;
     private $password;
     private $firstName;
@@ -62,10 +59,6 @@ class User extends AModel
         } else {
             $this->password = $password;
         }
-    }
-
-    public function setId($id) {
-        $this->id = $id;
     }
 
     public function setFirstName($firstName)

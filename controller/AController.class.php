@@ -5,8 +5,8 @@ namespace controller;
 
 abstract class AController
 {
-    protected $view;
-    protected $data = [];
+    protected string $view;
+    protected array $data = [];
 
     public abstract function process($params);
 
@@ -20,6 +20,7 @@ abstract class AController
 
     public function redirect($url = "")
     {
+        var_dump(HOME_PATH . $url);
         header("Location:" . HOME_PATH . $url);
         header("Connection: close");
         exit;
