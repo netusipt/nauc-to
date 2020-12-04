@@ -5,7 +5,8 @@ namespace model;
 
 use InvalidArgumentException;
 
-class User {
+class User extends AModel
+{
 
     private $id;
     private $table;

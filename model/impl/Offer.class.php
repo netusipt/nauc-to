@@ -11,4 +11,9 @@ class Offer {
     private string $description;
     private int $categoryId;
     private int $locationId;
+
+    public function __get($name)
+    {
+        return $this->$name;
+    }
 }
