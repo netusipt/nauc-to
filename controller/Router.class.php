@@ -5,7 +5,7 @@ namespace controller;
 
 class Router extends AController
 {
-    protected AController $controller;
+    protected $controller;
 
     public function process($params)
     {
