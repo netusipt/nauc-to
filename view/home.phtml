@@ -1,5 +1,5 @@
-<section id="about">
-    <div class="jumbotron jumbotron-fluid">
+<section id="main">
+    <div class="jumbotron jumbotron-fluid mb-0">
         <div class="container">
             <h1 class="display-4">Nauč se windsurfing.</h1>
             <p class="lead"></p>
@@ -7,52 +7,45 @@
     </div>
 </section>
 
-<section class="container">
-    <div class="row">
-        <div class="col-md">
-            <div class="card" style="width: 30rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Václav Richter</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Fitness</h6>
-                    <p class="card-text">Vytvořím vám jídelníček a cvičební plán na míru</p>
-                    <button id="basic-btn">Zobrazit</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md">
-            <div class="card" style="width: 30rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Karel Omáčka</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Programování</h6>
-                    <p class="card-text">Nabízím kurzy programování webových aplikací.</p>
-                    <button id="basic-btn">Zobrazit</button>
-                </div>
+<section id="search">
+    <div class="jumbotron jumbotron-fluid mb-3" style="background-color: #f1fdf7;">
+        <div class="container">
+            <div class="row">
+                <input class="form-control col mr-3 ml-3" placeholder="Kategorie" type="text">
+                <input class="form-control col mr-3 ml-3" placeholder="Poloha" type="text">
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md">
+</section>
+
+<section class="container">
+    <?php $i = 0; ?>
+    <?php foreach ($offers as $offer) : ?>
+
+        <?php if ($i++ % 2 == 0) : ?>
+            <div class="row">
+        <?php endif ?>
+
+        <div class="col-md mb-3">
             <div class="card" style="width: 30rem;">
                 <div class="card-body">
-                    <h5 class="card-title">Pavel Novák</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Windsurfing</h6>
-                    <p class="card-text">Nabízím výuku windsurfing pro začátečníky i mírně pokročilé.</p>
-                    <button id="basic-btn">Zobrazit</button>
+                    <h5 class="card-title"><?= $offer["first_name"] ?> <?= $offer["last_name"] ?></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><?= $offer["title"] ?></h6>
+                    <p class="card-text"><?= $offer["description"] ?></p>
+                    <a class="btn btn-success" href="<?= HOME_PATH ?>/offer/3">Zobrazit</a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md">
-            <div class="card" style="width: 30rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Jana Zadinová</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Vaření</h6>
-                    <p class="card-text">Naučím vás výborně vařit. Mám 6 let zkušeností v gastronomii.</p>
-                    <button id="basic-btn">Zobrazit</button>
-                </div>
+        <?php if ($i % 2 == 0) : ?>
             </div>
-        </div>
-    </div>
+        <?php endif ?>
+
+    <?php endforeach ?>
+</section>
+
+<section id="reviews">
+    <div class="jumbotron jumbotron-fluid">
 
     </div>
 </section>

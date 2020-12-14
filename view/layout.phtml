@@ -17,6 +17,12 @@
         <div class="navbar-collapse">
             <div class="navbar-nav">
                 <a class="nav-item nav-link js-scroll-trigger" href="#about">O nás</a>
+                <a class="nav-item nav-link js-scroll-trigger" href="<?=HOME_PATH?>/demand/list">poptávky</a>
+                <a class="nav-item nav-link js-scroll-trigger" href="<?=HOME_PATH?>/messages">zprávy</a>
+                <a class="nav-item nav-link js-scroll-trigger" href="<?=HOME_PATH?>/offer/new">vytvořit nabídku</a>
+                <a class="nav-item nav-link js-scroll-trigger" href="<?=HOME_PATH?>/demand/new">vytvořit poptávku</a>
+                <a class="nav-item nav-link js-scroll-trigger" href="<?=HOME_PATH?>/offer/my-listing">moje nabídky</a>
+                <a class="nav-item nav-link js-scroll-trigger" href="<?=HOME_PATH?>/demand/my-listing">moje poptávky</a>
             </div>
             <div class="ml-auto">
                 <?php if (isset($_SESSION["loggedIn"])): ?>

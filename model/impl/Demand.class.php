@@ -1,21 +1,37 @@
 <?php
-
-
 namespace model\impl;
-
 
 use model\AModel;
 
 class Demand extends AModel
 {
+    private $title;
+    private $description;
 
-    public function getPropertyNames()
+    public function get($id)
     {
-        // TODO: Implement getPropertyNames() method.
+        $sql = "SELECT demand.id, demand.description, title, first_name, last_name FROM demand
+        INNER JOIN users ON demand.user_id = users.id
+        WHERE demand.id = $id";
+        return $this->query($sql, true);
     }
 
-    public function getProperties()
+    public function getAll() {
+        $sql = "SELECT demand.id, demand.description, title, first_name, last_name FROM demand 
+                JOIN users ON demand.user_id = users.id";
+
+        return $this->query($sql, true, true); 
+    }
+
+    public function getPropertyNames(): array
     {
-        // TODO: Implement getProperties() method.
+        return array_keys($this->getProperties());
+    }
+
+    public function getProperties(): array
+    {
+        $properties = get_object_vars($this);
+        unset($properties["table"]);
+        return $properties;
     }
 }

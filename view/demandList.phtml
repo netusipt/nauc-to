@@ -1,0 +1,14 @@
+<div class="container">
+    <?php foreach ($demands as  $demand) : ?>
+        <div class="mt-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h3><?= $demand["title"] ?></h3>
+                    <p><b><?= $demand["first_name"] ?> <?php $demand["last_name"] ?></b></p>
+                    <p><?= $demand["description"] ?></p>
+                    <a href="<?= HOME_PATH ?>/demand/<?=$demand["id"]?>">zobrazit více</a>
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+</div>

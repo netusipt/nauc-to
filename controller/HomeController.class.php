@@ -12,8 +12,7 @@ class HomeController extends AController
     public function process($params)
     {
         $offer = new Offer();
-        $entityManager = EntityManager::getInstance($offer);
-        $this->data["offers"] = $entityManager->getAll();
+        $this->data["offers"] = $offer->getAll();
         $this->view = "home";
     }
 }

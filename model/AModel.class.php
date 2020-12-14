@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace model;
 
+use util\db\APDODriver;
 
-abstract class AModel implements IModel
+abstract class AModel extends APDODriver implements IModel
 {
     protected $id;
     protected $table;

@@ -9,7 +9,7 @@ use PDOException;
 
 abstract class APDODriver
 {
-    private PDO $pdo;
+    private $pdo;
 
     public function __construct()
     {
